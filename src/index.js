@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 const DATA = [
   {id: "0", task: "Eat", dueDate: "2022-10-26", completed: true},
-  {id: "1", task: "Sleep", dueDate: "2022-11-1", completed: true}
+  {id: "1", task: "Sleep", dueDate: "2022-11-01", completed: true}
 ];
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -21,14 +21,14 @@ function App({ data }) {
   function editTask(id, newName, newDueDate) {
     const editedTaskList = values.map((task) => {
       if (id === task.id) {
-        return { ...task, task: newName }
+        return { ...task, task: newName, dueDate: newDueDate }
       }
       return task;
     });
     setValues(editedTaskList);
   }
 
-  const taskList = values.map((task) => <ToDo toDo={task} key={task.id} toggleTaskCompleted={toggleTaskCompleted} editTask={editTask}></ToDo>);
+  const taskList = values.map((task) => <ToDo task={task.task} dueDate={task.dueDate} key={task.id} toggleTaskCompleted={toggleTaskCompleted} editTask={editTask}></ToDo>);
 
   const addTask = (newValue) => {
     const newTask = { id: values.length + 1, task: newValue.task, dueDate: newValue.dueDate, completed: false };
@@ -46,21 +46,19 @@ function App({ data }) {
       <hr />
       <h4>{taskCount}</h4>
       <div className='d-flex justify-content-center mt-4'>
-        <form>
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>Tasks</th>
-                <th>Due Dates</th>
-                <th colSpan={2}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {taskList}
-            </tbody>
-          </table>
-          </form>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Tasks</th>
+              <th>Due Dates</th>
+              <th colSpan={2}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {taskList}
+          </tbody>
+        </table>
       </div>
     </div>
   );
