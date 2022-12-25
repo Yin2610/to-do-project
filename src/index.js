@@ -1,18 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 
 const DATA = [
-  {id: "0", task: "Eat", dueDate: "2022-10-26", completed: true},
-  {id: "1", task: "Sleep", dueDate: "2022-11-01", completed: true}
+  { id: "0", task: "Eat", dueDate: "2022-10-26", completed: true },
+  { id: "1", task: "Sleep", dueDate: "2022-11-01", completed: true },
+  { id: "2", task: "Work", dueDate: "2022-11-05", completed: false },
 ];
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App data={DATA}/>
+    <App data={DATA} />
   </React.StrictMode>
 );
 
