@@ -16,6 +16,8 @@ const FILTER_NAMES = Object.keys(FILTER_MAP);
 function App({ data }) {
   const [values, setValues] = useState(data);
   const [filter, setFilter] = useState("All");
+  const [search, setSearch] = useState("");
+  const [isSearching, setSearching] = useState(false);
 
   function toggleTaskCompleted(id) {
     const updatedTasks = values.map((task) => {
@@ -62,9 +64,10 @@ function App({ data }) {
   function selectOne(name) {
     const filterBtnGrp = document.querySelectorAll(".filterBtn");
     for (const filterBtn of filterBtnGrp) {
-      if (filterBtn.id !== name) {
-        filterBtn.ariaPressed = false;
-        alert(filterBtn.ariaPressed);
+      if (filterBtn.id === name) {
+        filterBtn.classList.add("active");
+      } else {
+        filterBtn.classList.remove("active");
       }
     }
   }
@@ -76,8 +79,35 @@ function App({ data }) {
       isPressed={name === filter}
       selectOne={selectOne}
       setFilter={setFilter}
+      setSearching={setSearching}
     />
   ));
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  var searchList = [];
+
+  function searchFunc(searchString) {
+    const regex = new RegExp(".*" + searchString + ".*", "gi");
+    for (let index = 0; index < values.length; index++) {
+      if (values[index].task.match(regex) !== null) {
+        searchList = [...searchList,
+          <ToDo
+            id={values[index].id}
+            task={values[index].task}
+            dueDate={values[index].dueDate}
+            completed={values[index].completed}
+            key={values[index].id}
+            toggleTaskCompleted={toggleTaskCompleted}
+            editTask={editTask}
+            deleteTask={deleteTask}
+          ></ToDo>
+        ];
+      }
+    }
+  }
 
   const addTask = (newValue) => {
     const newTask = {
@@ -89,13 +119,15 @@ function App({ data }) {
     setValues([...values, newTask]);
   };
 
+  const taskVerb = isSearching === true? "found":
+    filter === "All" ? "in total" : filter === "Active" ? "remaining" : "done";
+
+  const displayList = isSearching? searchList: taskList;
+  
   const tasksNoun =
-    taskList.length !== 0 && taskList.length !== 1 ? "tasks" : "task";
+    displayList.length !== 0 && displayList.length !== 1 ? "tasks" : "task";
 
-  const taskVerb =
-    filter == "All" ? "in total" : filter == "Active" ? "remaining" : "done";
-
-  const taskCount = `${taskList.length} ${tasksNoun} ${taskVerb}: `;
+  const taskCount = `${displayList.length} ${tasksNoun} ${taskVerb}: `;
 
   return (
     <div className="App">
@@ -103,7 +135,34 @@ function App({ data }) {
       <AddForm addTask={addTask}></AddForm>
       <hr />
       {filterList}
-      <h4>{taskCount}</h4>
+      <div className="d-flex justify-content-center row">
+        <div className="col-md-2">
+          <h5>{taskCount}</h5>
+        </div>
+        <div className="d-flex justify-content-center row mt-2">
+          <div className="col-md-2">
+            <input
+              type="search"
+              id="search"
+              className="form-control"
+              placeholder="Search task"
+              value={search}
+              onChange={handleChange}
+            ></input>
+          </div>
+          <div className="col-md-1">
+            <button
+              className="btn btn-outline-secondary"
+              onClick={() => {
+                searchFunc(document.getElementById("search").value);
+                setSearching(true);
+              }}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
       <div className="d-flex justify-content-center mt-4">
         <table>
           <thead>
@@ -114,7 +173,9 @@ function App({ data }) {
               <th colSpan={2}>Actions</th>
             </tr>
           </thead>
-          <tbody>{taskList}</tbody>
+          <tbody>
+            {displayList}
+          </tbody>
         </table>
       </div>
     </div>

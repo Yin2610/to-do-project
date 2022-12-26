@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./App.css";
 
 function ToDo(props) {
   const [isEditing, setEditing] = useState(false);
